@@ -5,7 +5,7 @@ export default function AdminLayout() {
   return (
     <>
       {/* navbar */}
-      <header>Admin Side</header>
+      <header>---Admin Side---</header>
       {/* navbar */}
       <Outlet />
     </>
