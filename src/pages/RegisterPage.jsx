@@ -1,12 +1,28 @@
 import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../configs/firebase";
+import { useNavigate } from "react-router";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function handleRegister(e) {
     e.preventDefault();
-    console.log(email, password);
+    try {
+      const userRegistered = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userRegistered);
+      navigate("/");
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode, "-", errorMessage);
+    }
   }
 
   return (
