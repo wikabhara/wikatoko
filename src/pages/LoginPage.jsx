@@ -47,9 +47,7 @@ export default function LoginPage() {
         </div>
         <button>Login</button>
       </form>
-
-      <div>Haven't got an account? Sign up</div>
-      <button>here!</button>
+      <div>Haven't got an account? Sign up here!</div>
     </div>
   );
 }

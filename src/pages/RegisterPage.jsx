@@ -49,6 +49,7 @@ export default function RegisterPage() {
         </div>
         <button>Register</button>
       </form>
+      <div>Already have an account? Login here!</div>
     </div>
   );
 }
