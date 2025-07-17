@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { auth } from "../configs/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { CgProfile } from "react-icons/cg";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -42,11 +43,8 @@ export default function MainLayout() {
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+              <div className="rounded-full text-4xl">
+                <CgProfile />
               </div>
             </div>
             <ul

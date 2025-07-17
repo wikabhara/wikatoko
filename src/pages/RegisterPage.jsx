@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -21,7 +22,12 @@ export default function RegisterPage() {
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode, "-", errorMessage);
+
+      Swal.fire({
+        icon: "error",
+        title: errorCode,
+        text: errorMessage,
+      });
     }
   }
 
