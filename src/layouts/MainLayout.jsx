@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 import { auth } from "../configs/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { CgProfile } from "react-icons/cg";
+import LogoWikaToko from "../assets/img/wikaToko.png";
 
 export default function MainLayout() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export default function MainLayout() {
     <>
       {/* navbar */}
       <div className="navbar bg-base-100 shadow-sm">
+        <img src={LogoWikaToko} alt="WikaToko Logo" className="h-16" />
         <div className="flex-1">
           <a className="btn btn-ghost text-xl">WikaToko</a>
         </div>
@@ -55,6 +57,12 @@ export default function MainLayout() {
                   Profile
                   <span className="badge">New</span>
                 </a>
+              </li>
+              <li>
+                <a>Cart</a>
+              </li>
+              <li>
+                <a>Favourites</a>
               </li>
               <li>
                 <a>Settings</a>
