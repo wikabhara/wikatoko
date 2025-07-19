@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate, Link } from "react-router";
 import { auth } from "../configs/firebase";
 import { signOut } from "firebase/auth";
 import { CgProfile } from "react-icons/cg";
@@ -38,7 +38,9 @@ export default function MainLayout() {
       <div className="navbar bg-base-100 shadow-sm">
         <img src={LogoWikaToko} alt="WikaToko Logo" className="h-16" />
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">WikaToko</a>
+          <Link to="/" className="btn btn-ghost text-xl">
+            WikaToko
+          </Link>
         </div>
         <div className="flex gap-2">
           <input
@@ -59,22 +61,29 @@ export default function MainLayout() {
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
               <li>
-                <a className="justify-between">
+                <Link to="/profile" className="justify-between">
                   Profile
-                  <span className="badge">New</span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a>About</a>
+                <Link to="/about" className="justify-between">
+                  About
+                </Link>
               </li>
               <li>
-                <a>Cart</a>
+                <Link to="/cart" className="justify-between">
+                  Cart
+                </Link>
               </li>
               <li>
-                <a>Favourite</a>
+                <Link to="/favourite" className="justify-between">
+                  Favourite
+                </Link>
               </li>
               <li>
-                <a>Contact</a>
+                <Link to="/contact" className="justify-between">
+                  Contact
+                </Link>
               </li>
               <li onClick={handleLogout}>
                 <a>Logout</a>
