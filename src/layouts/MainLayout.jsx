@@ -11,7 +11,6 @@ export default function MainLayout() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   useEffect(() => {
-    console.log("Pengecheckan user di MainLayout");
     if (!user) {
       navigate("/auth/login");
     }
