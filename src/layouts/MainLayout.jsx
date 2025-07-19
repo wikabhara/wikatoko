@@ -81,8 +81,8 @@ export default function MainLayout() {
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="justify-between">
-                  Contact
+                <Link to="/contactus" className="justify-between">
+                  Contact Us
                 </Link>
               </li>
               <li onClick={handleLogout}>
