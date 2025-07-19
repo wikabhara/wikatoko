@@ -1,31 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
-import { auth } from "../configs/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import LogoWikaToko from "../assets/img/wikaToko.png";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function AdminLayout() {
-  const [isLoadPage, setLoadPage] = useState(true); //load page trick//
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      console.log(user);
-      if (user) {
-        navigate("/");
-      }
-      setLoadPage(false); //load page trick//
-    });
+    console.log("Pengecheckan user di AdminLayout");
+    if (user) {
+      navigate("/");
+    }
   }, []);
-
-  //load page trick//
-  if (isLoadPage) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading....
-      </div>
-    );
-  }
 
   return (
     <>

@@ -1,30 +1,36 @@
-import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router";
 import { auth } from "../configs/firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { CgProfile } from "react-icons/cg";
 import LogoWikaToko from "../assets/img/wikaToko.png";
+import Swal from "sweetalert2";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function MainLayout() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    console.log("Pengecheckan user di MainLayout");
+    if (!user) {
+      navigate("/auth/login");
+    }
+  }, []);
+
   async function handleLogout() {
     try {
       await signOut(auth);
       navigate("/auth/login");
     } catch (error) {
-      console.log(error);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      Swal.fire({
+        icon: "error",
+        title: errorCode,
+        text: errorMessage,
+      });
     }
   }
-  // ini buat protect page
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      console.log(user);
-      if (!user) {
-        navigate("/auth/login");
-      }
-    });
-  }, []);
-  // ini buat protect page
 
   return (
     <>
@@ -59,13 +65,16 @@ export default function MainLayout() {
                 </a>
               </li>
               <li>
+                <a>About</a>
+              </li>
+              <li>
                 <a>Cart</a>
               </li>
               <li>
-                <a>Favourites</a>
+                <a>Favourite</a>
               </li>
               <li>
-                <a>Settings</a>
+                <a>Contact</a>
               </li>
               <li onClick={handleLogout}>
                 <a>Logout</a>
