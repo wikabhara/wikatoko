@@ -18,7 +18,7 @@ export default function LoginPage() {
         email,
         password
       );
-      console.log(userLoggedIn);
+
       navigate("/");
     } catch (error) {
       const errorCode = error.code;
