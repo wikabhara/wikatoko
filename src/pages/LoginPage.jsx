@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   async function handleLogin(e) {
     e.preventDefault();
-    console.log(email, password);
+
     try {
       const userLoggedIn = await signInWithEmailAndPassword(
         auth,

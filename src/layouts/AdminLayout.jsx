@@ -8,7 +8,6 @@ export default function AdminLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Pengecheckan user di AdminLayout");
     if (user) {
       navigate("/");
     }
