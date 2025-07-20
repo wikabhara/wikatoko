@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
 
   async function handleRegister(e) {
@@ -17,7 +18,7 @@ export default function RegisterPage() {
         email,
         password
       );
-      console.log(userRegistered);
+
       navigate("/");
     } catch (error) {
       const errorCode = error.code;
