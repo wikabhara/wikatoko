@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../configs/firebase";
+import { auth, googleProvider } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import Swal from "sweetalert2";
+import { FaGoogle } from "react-icons/fa";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -31,6 +33,28 @@ export default function RegisterPage() {
       });
     }
   }
+
+  // handle google login
+  async function handleGoogleLogin() {
+    try {
+      const oauthLogin = await signInWithPopup(auth, googleProvider);
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(oauthLogin);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = oauthLogin.user;
+      navigate("/");
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      Swal.fire({
+        icon: "error",
+        title: errorCode,
+        text: errorMessage,
+      });
+    }
+  }
+  // handle google login
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
@@ -82,6 +106,15 @@ export default function RegisterPage() {
               Login di sini!
             </Link>
           </p>
+          <div className="form-control mt-4 flex justify-center items-center">
+            <button
+              type="button"
+              className="btn btn-neutral w-full"
+              onClick={handleGoogleLogin}>
+              <FaGoogle className="mr-2" />
+              Sign in with Google
+            </button>
+          </div>
         </div>
       </div>
     </div>
