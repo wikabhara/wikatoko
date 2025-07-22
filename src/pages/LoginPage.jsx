@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { auth } from "../configs/firebase";
+import { auth, googleProvider } from "../configs/firebase";
 import { Link, useNavigate } from "react-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import Swal from "sweetalert2";
+import { FaGoogle } from "react-icons/fa";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -30,6 +35,29 @@ export default function LoginPage() {
       });
     }
   }
+
+  // handle google login
+  async function handleGoogleLogin() {
+    try {
+      const oauthLogin = await signInWithPopup(auth, googleProvider);
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(oauthLogin);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = oauthLogin.user;
+      navigate("/");
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      Swal.fire({
+        icon: "error",
+        title: errorCode,
+        text: errorMessage,
+      });
+    }
+  }
+  // handle google login
+
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
       <div className="card w-full max-w-sm shadow-2xl bg-base-100">
@@ -66,7 +94,7 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="form-control mt-6">
+            <div className="form-control mt-6 flex justify-center items-center">
               <button type="submit" className="btn btn-primary">
                 Login
               </button>
@@ -79,6 +107,15 @@ export default function LoginPage() {
               Daftar di sini!
             </Link>
           </p>
+          <div className="form-control mt-4 flex justify-center items-center">
+            <button
+              type="button"
+              className="btn btn-neutral w-full"
+              onClick={handleGoogleLogin}>
+              <FaGoogle className="mr-2" />
+              Sign in with Google
+            </button>
+          </div>
         </div>
       </div>
     </div>

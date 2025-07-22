@@ -69,7 +69,7 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div className="form-control mt-6">
+            <div className="form-control mt-6 flex justify-center items-center">
               <button type="submit" className="btn btn-primary">
                 Register
               </button>
