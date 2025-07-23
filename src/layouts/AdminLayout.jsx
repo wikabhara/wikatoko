@@ -11,6 +11,8 @@ export default function AdminLayout() {
   useEffect(() => {
     if (user) {
       navigate("/");
+    } else if (!user) {
+      navigate("/auth/login");
     }
   }, []);
   // protecting your page
