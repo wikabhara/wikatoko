@@ -3,6 +3,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function MyProductPage() {
   const { user } = useContext(AuthContext);
@@ -14,16 +15,25 @@ export default function MyProductPage() {
   async function submitProduct(e) {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "products"), {
+      await addDoc(collection(db, "products"), {
         Name: Name,
         ImageUrl: ImageUrl,
         Price: Price,
       });
-      console.log(docRef);
-      console.log("produk berhasil ditambahkan", Name);
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil!",
+        text: "Produk berhasil ditambahkan.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
       navigate("/");
     } catch (error) {
-      console.log(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Terjadi kesalahan saat menambahkan produk.",
+      });
     }
   }
 

@@ -3,9 +3,9 @@ import { AuthContext } from "../contexts/AuthContext";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate, useParams } from "react-router";
+import Swal from "sweetalert2";
 
 export default function EditProductPage() {
-  const { user } = useContext(AuthContext);
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState(0);
@@ -21,10 +21,10 @@ export default function EditProductPage() {
         ImageUrl: ImageUrl,
         Price: Price,
       });
-      console.log("Successfully Edit Product", id);
+      Swal.fire("Berhasil!", "Produk berhasil diperbarui.", "success");
       navigate("/");
     } catch (error) {
-      console.log(error);
+      Swal.fire("Gagal", "Terjadi kesalahan saat memperbarui produk.", "error");
     }
   }
 
@@ -33,70 +33,79 @@ export default function EditProductPage() {
       try {
         const docRef = doc(db, "products", idProduct);
         const docSnap = await getDoc(docRef);
-        console.log(docSnap.data());
 
         if (docSnap.exists()) {
           setName(docSnap.data().Name);
           setImageUrl(docSnap.data().ImageUrl);
           setPrice(docSnap.data().Price);
         } else {
-          console.log("Product tidak ditemukan");
+          Swal.fire("Error", "Produk tidak ditemukan.", "error");
         }
       } catch (error) {
-        console.log(error);
+        Swal.fire(
+          "Gagal",
+          "Terjadi kesalahan saat memperbarui produk.",
+          "error"
+        );
       }
     }
     getProductById(id);
   }, []);
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center bg-base-100">
-        <div className="text-center">
-          {user && (
-            <h2 className="text-2xl md:text-3xl font-semibold text-base-content/80 mb-4">
-              Hai {user.email}
-            </h2>
-          )}
-          <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-base-content animate-pulse">
-              Edit Product
-            </h1>
+      <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+        <div className="w-full max-w-lg">
+          <h1 className="text-4xl font-bold text-center mb-6">Edit Product</h1>
 
-            <form onSubmit={editProduct} action="">
-              <div>
-                <label htmlFor="">Product Name</label>
-                <br />
-                <input
-                  type="text"
-                  value={Name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="">Image URL</label>
-                <br />
-                <input
-                  type="text"
-                  value={ImageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="">Price</label>
-                <br />
-                <input
-                  type="number"
-                  value={Price}
-                  onChange={(e) => setPrice(+e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" className="btn">
-                Submit
-              </button>
-            </form>
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <form onSubmit={editProduct}>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Product Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-full"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Image URL</span>
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-bordered w-full"
+                    value={ImageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Price</span>
+                  </label>
+                  <input
+                    type="number"
+                    className="input input-bordered w-full"
+                    value={Price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-6">
+                  <button type="submit" className="btn btn-primary w-full">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
