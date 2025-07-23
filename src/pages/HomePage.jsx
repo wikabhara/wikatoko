@@ -4,6 +4,7 @@ import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -22,13 +23,30 @@ export default function HomePage() {
   }
 
   async function deleteProduct(id) {
-    try {
-      await deleteDoc(doc(db, "products", id));
-      console.log("succesfully delete product with id", id);
-      await getProducts();
-    } catch (error) {
-      console.log(error);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteDoc(doc(db, "products", id));
+          console.log("succesfully delete product with id", id);
+          await getProducts();
+        } catch (error) {
+          console.log(error);
+        }
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   }
 
   useEffect(() => {
