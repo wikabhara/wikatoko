@@ -9,8 +9,8 @@ import ContactUsPage from "./pages/ContactUsPage";
 import AboutPage from "./pages/AboutPage";
 import AuthContextProvider from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
-import CartPage from "./pages/CartPage";
 import FavouritePage from "./pages/FavouritePage";
+import MyProductPage from "./pages/MyProductPage";
 
 const router = createBrowserRouter([
   {
@@ -34,8 +34,8 @@ const router = createBrowserRouter([
         element: <ProfilePage />,
       },
       {
-        path: "cart",
-        element: <CartPage />,
+        path: "myproduct/add",
+        element: <MyProductPage />,
       },
       {
         path: "favourite",

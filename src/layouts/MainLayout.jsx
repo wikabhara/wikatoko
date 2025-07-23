@@ -8,6 +8,7 @@ import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
 export default function MainLayout() {
+  // protecting your page
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   useEffect(() => {
@@ -15,6 +16,7 @@ export default function MainLayout() {
       navigate("/auth/login");
     }
   }, []);
+  // protecting your page
 
   async function handleLogout() {
     try {
@@ -70,8 +72,8 @@ export default function MainLayout() {
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="justify-between">
-                  Cart
+                <Link to="/myproduct" className="justify-between">
+                  My Product
                 </Link>
               </li>
               <li>
