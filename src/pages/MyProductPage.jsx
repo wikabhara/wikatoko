@@ -8,7 +8,7 @@ export default function MyProductPage() {
   const { user } = useContext(AuthContext);
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
-  const [Price, setPrice] = useState(0);
+  const [Price, setPrice] = useState();
   const navigate = useNavigate();
 
   async function submitProduct(e) {
@@ -30,53 +30,67 @@ export default function MyProductPage() {
   useEffect(() => {}, []);
   return (
     <>
-      <div className="min-h-[80vh] flex items-center justify-center bg-base-100">
-        <div className="text-center">
+      <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+        <div className="w-full max-w-lg">
           {user && (
-            <h2 className="text-2xl md:text-3xl font-semibold text-base-content/80 mb-4">
+            <h2 className="text-2xl text-center font-semibold mb-2">
               Hai {user.email}
             </h2>
           )}
-          <div className="flex flex-col items-center justify-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-base-content animate-pulse">
-              Add Product
-            </h1>
+          <h1 className="text-4xl font-bold text-center mb-6">Add Product</h1>
 
-            <form onSubmit={submitProduct} action="">
-              <div>
-                <label htmlFor="">Product Name</label>
-                <br />
-                <input
-                  type="text"
-                  value={Name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="">Image URL</label>
-                <br />
-                <input
-                  type="text"
-                  value={ImageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="">Price</label>
-                <br />
-                <input
-                  type="number"
-                  value={Price}
-                  onChange={(e) => setPrice(+e.target.value)}
-                  required
-                />
-              </div>
-              <button type="submit" className="btn">
-                Submit
-              </button>
-            </form>
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body">
+              <form onSubmit={submitProduct}>
+                <div className="form-control">
+                  <label className="label">
+                    <span className="label-text">Product Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g., Sunscreen Spray"
+                    className="input input-bordered w-full"
+                    value={Name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Image URL</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="https://example.com/image.jpg"
+                    className="input input-bordered w-full"
+                    value={ImageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Price</span>
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="500000"
+                    className="input input-bordered w-full"
+                    value={Price}
+                    onChange={(e) => setPrice(Number(e.target.value))}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-6">
+                  <button type="submit" className="btn btn-primary w-full">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
