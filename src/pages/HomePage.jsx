@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
 
@@ -9,20 +9,28 @@ export default function HomePage() {
   const [products, setProducts] = useState();
   const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    async function getProducts() {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const result = querySnapshot.docs.map((doc) => {
-        console.log(doc.id);
-        console.log(doc.data());
-        return {
-          id: doc.id,
-          ...doc.data(),
-        };
-      });
+  async function getProducts() {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    const result = querySnapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
+    setProducts(result);
+  }
 
-      setProducts(result);
+  async function deleteProduct(id) {
+    try {
+      await deleteDoc(doc(db, "products", id));
+      console.log("succesfully delete product with id", id);
+      await getProducts();
+    } catch (error) {
+      console.log(error);
     }
+  }
+
+  useEffect(() => {
     getProducts();
   }, []);
 
@@ -40,7 +48,8 @@ export default function HomePage() {
             <button
               onClick={() => navigate("/myproduct/add")}
               type="button"
-              className="btn">
+              className="btn"
+            >
               Add Product
             </button>
             <table className="border-2">
@@ -60,10 +69,18 @@ export default function HomePage() {
                   </td>
                   <td className="border-2">{p.Price}</td>
                   <td>
-                    <button type="button" className="btn">
+                    <button
+                      onClick={() => navigate(`/products/edit/${p.id}`)}
+                      type="button"
+                      className="btn"
+                    >
                       Edit
                     </button>
-                    <button type="button" className="btn">
+                    <button
+                      onClick={() => deleteProduct(p.id)}
+                      type="button"
+                      className="btn"
+                    >
                       Delete
                     </button>
                   </td>

@@ -11,6 +11,7 @@ import AuthContextProvider from "./contexts/AuthContext";
 import ProfilePage from "./pages/ProfilePage";
 import FavouritePage from "./pages/FavouritePage";
 import MyProductPage from "./pages/MyProductPage";
+import EditProductPage from "./pages/EditProduct";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "favourite",
         element: <FavouritePage />,
+      },
+      {
+        path: "products/edit/:id",
+        element: <EditProductPage />,
       },
     ],
   },

@@ -7,11 +7,13 @@ export default function AdminLayout() {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // protecting your page
   useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, []);
+  // protecting your page
 
   return (
     <>

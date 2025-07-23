@@ -1,33 +1,53 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../configs/firebase";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
-export default function MyProductPage() {
+export default function EditProductPage() {
   const { user } = useContext(AuthContext);
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState(0);
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  async function submitProduct(e) {
+  async function editProduct(e) {
     e.preventDefault();
     try {
-      const docRef = await addDoc(collection(db, "products"), {
+      const docRef = doc(db, "products", id);
+      await updateDoc(docRef, {
         Name: Name,
         ImageUrl: ImageUrl,
         Price: Price,
       });
-      console.log(docRef);
-      console.log("produk berhasil ditambahkan", Name);
+      console.log("Successfully Edit Product", id);
       navigate("/");
     } catch (error) {
       console.log(error);
     }
   }
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    async function getProductById(idProduct) {
+      try {
+        const docRef = doc(db, "products", idProduct);
+        const docSnap = await getDoc(docRef);
+        console.log(docSnap.data());
+
+        if (docSnap.exists()) {
+          setName(docSnap.data().Name);
+          setImageUrl(docSnap.data().ImageUrl);
+          setPrice(docSnap.data().Price);
+        } else {
+          console.log("Product tidak ditemukan");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getProductById(id);
+  }, []);
   return (
     <>
       <div className="min-h-[80vh] flex items-center justify-center bg-base-100">
@@ -39,10 +59,10 @@ export default function MyProductPage() {
           )}
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-4xl md:text-6xl font-bold text-base-content animate-pulse">
-              Add Product
+              Edit Product
             </h1>
 
-            <form onSubmit={submitProduct} action="">
+            <form onSubmit={editProduct} action="">
               <div>
                 <label htmlFor="">Product Name</label>
                 <br />
