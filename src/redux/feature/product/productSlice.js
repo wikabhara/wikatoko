@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../../../configs/firebase";
 
 const initialState = {
@@ -42,7 +48,6 @@ export const fetchProducts = () => async (dispatch) => {
       };
     });
     dispatch(setProducts(result));
-    console.log(result);
   } catch (error) {
     dispatch(setError(error));
   } finally {
@@ -57,9 +62,24 @@ export const addProduct = (product) => async (dispatch) => {
       ImageUrl: product.ImageUrl,
       Price: product.Price,
     });
+    dispatch(fetchProducts());
+  } catch (error) {
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const deleteProduct = (idProduct) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    await deleteDoc(doc(db, "products", idProduct));
+    dispatch(fetchProducts());
   } catch (error) {
     console.log(error);
+    dispatch(setError(error));
   } finally {
+    dispatch(setLoading(false));
   }
 };
 

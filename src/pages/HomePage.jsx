@@ -6,7 +6,10 @@ import { useNavigate } from "react-router";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProducts } from "../redux/feature/product/productSlice";
+import {
+  fetchProducts,
+  deleteProduct as deleteProductWithRedux,
+} from "../redux/feature/product/productSlice";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -38,8 +41,9 @@ export default function HomePage() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await deleteDoc(doc(db, "products", id));
-          console.log("succesfully delete product with id", id);
+          dispatch(deleteProductWithRedux(id));
+          // await deleteDoc(doc(db, "products", id));
+          // console.log("succesfully delete product with id", id);
           dispatch(fetchProducts());
         } catch (error) {
           console.log(error);

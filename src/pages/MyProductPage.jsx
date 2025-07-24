@@ -1,25 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../redux/feature/product/productSlice";
+useDispatch;
 
 export default function MyProductPage() {
   const { user } = useContext(AuthContext);
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function submitProduct(e) {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "products"), {
-        Name: Name,
-        ImageUrl: ImageUrl,
-        Price: Price,
-      });
+      const product = {
+        Name,
+        ImageUrl,
+        Price,
+      };
+      dispatch(addProduct(product));
       Swal.fire({
         icon: "success",
         title: "Berhasil!",
