@@ -67,6 +67,7 @@ export const fetchProductsById = (idProduct) => async (dispatch) => {
       Name: docSnap.data().Name,
       ImageUrl: docSnap.data().ImageUrl,
       Price: docSnap.data().Price,
+      Stock: docSnap.data().Stock,
     };
     dispatch(setProduct(product));
   } catch (error) {
@@ -82,6 +83,7 @@ export const addProduct = (product) => async (dispatch) => {
       Name: product.Name,
       ImageUrl: product.ImageUrl,
       Price: product.Price,
+      Stock: product.Stock,
     });
     dispatch(fetchProducts());
   } catch (error) {
@@ -112,6 +114,7 @@ export const editProductByID = (product) => async (dispatch) => {
       Name: product.Name,
       ImageUrl: product.ImageUrl,
       Price: product.Price,
+      Stock: product.Stock,
     });
     dispatch(fetchProducts());
   } catch (error) {

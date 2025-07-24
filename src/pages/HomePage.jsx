@@ -13,21 +13,10 @@ import {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  // const [products, setProducts] = useState([]);
+
   const { products, isLoading, error } = useSelector((state) => state.product);
   const { user } = useContext(AuthContext);
   const dispatch = useDispatch();
-
-  // async function getProducts() {
-  //   const querySnapshot = await getDocs(collection(db, "products"));
-  //   const result = querySnapshot.docs.map((doc) => {
-  //     return {
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     };
-  //   });
-  //   setProducts(result);
-  // }
 
   async function deleteProduct(id) {
     Swal.fire({
@@ -42,8 +31,7 @@ export default function HomePage() {
       if (result.isConfirmed) {
         try {
           dispatch(deleteProductWithRedux(id));
-          // await deleteDoc(doc(db, "products", id));
-          // console.log("succesfully delete product with id", id);
+
           dispatch(fetchProducts());
         } catch (error) {
           console.log(error);
@@ -59,7 +47,6 @@ export default function HomePage() {
 
   useEffect(() => {
     dispatch(fetchProducts());
-    // getProducts();
   }, []);
 
   return (
@@ -103,6 +90,8 @@ export default function HomePage() {
                       <p className="text-lg font-semibold text-primary">
                         Rp {Number(p.Price).toLocaleString("id-ID")}
                       </p>
+                      <p className="text-md">Stok: {p.Stock}</p>
+
                       <div className="card-actions justify-end mt-4">
                         <button
                           onClick={() => navigate(`/products/edit/${p.id}`)}

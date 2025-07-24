@@ -15,6 +15,7 @@ export default function EditProductPage() {
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState(0);
+  const [Stock, setStock] = useState(0);
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -22,13 +23,7 @@ export default function EditProductPage() {
   async function editProduct(e) {
     e.preventDefault();
     try {
-      dispatch(editProductByID({ id, Name, ImageUrl, Price }));
-      // const docRef = doc(db, "products", id);
-      // await updateDoc(docRef, {
-      //   Name: Name,
-      //   ImageUrl: ImageUrl,
-      //   Price: Price,
-      // });
+      dispatch(editProductByID({ id, Name, ImageUrl, Price, Stock }));
       Swal.fire("Berhasil!", "Produk berhasil diperbarui.", "success");
       navigate("/");
     } catch (error) {
@@ -45,32 +40,10 @@ export default function EditProductPage() {
       setName(product.Name);
       setImageUrl(product.ImageUrl);
       setPrice(product.Price);
+      setStock(product.Stock);
     }
   }, [product]);
 
-  // useEffect(() => {
-  //   async function getProductById(idProduct) {
-  //     try {
-  //       const docRef = doc(db, "products", idProduct);
-  //       const docSnap = await getDoc(docRef);
-
-  //       if (docSnap.exists()) {
-  //         setName(docSnap.data().Name);
-  //         setImageUrl(docSnap.data().ImageUrl);
-  //         setPrice(docSnap.data().Price);
-  //       } else {
-  //         Swal.fire("Error", "Produk tidak ditemukan.", "error");
-  //       }
-  //     } catch (error) {
-  //       Swal.fire(
-  //         "Gagal",
-  //         "Terjadi kesalahan saat memperbarui produk.",
-  //         "error"
-  //       );
-  //     }
-  //   }
-  //   getProductById(id);
-  // }, []);
   return (
     <>
       <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
@@ -115,6 +88,19 @@ export default function EditProductPage() {
                     className="input input-bordered w-full"
                     value={Price}
                     onChange={(e) => setPrice(Number(e.target.value))}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Stock</span>
+                  </label>
+                  <input
+                    type="number"
+                    className="input input-bordered w-full"
+                    value={Stock}
+                    onChange={(e) => setStock(Number(e.target.value))}
                     required
                   />
                 </div>

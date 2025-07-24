@@ -11,6 +11,7 @@ export default function MyProductPage() {
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState();
+  const [Stock, setStock] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,6 +22,7 @@ export default function MyProductPage() {
         Name,
         ImageUrl,
         Price,
+        Stock,
       };
       dispatch(addProduct(product));
       Swal.fire({
@@ -93,6 +95,20 @@ export default function MyProductPage() {
                     className="input input-bordered w-full"
                     value={Price}
                     onChange={(e) => setPrice(Number(e.target.value))}
+                    required
+                  />
+                </div>
+
+                <div className="form-control mt-4">
+                  <label className="label">
+                    <span className="label-text">Stock</span>
+                  </label>
+                  <input
+                    type="number"
+                    placeholder="10"
+                    className="input input-bordered w-full"
+                    value={Stock}
+                    onChange={(e) => setStock(Number(e.target.value))}
                     required
                   />
                 </div>
