@@ -4,7 +4,9 @@ import {
   collection,
   deleteDoc,
   doc,
+  getDoc,
   getDocs,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../configs/firebase";
 
@@ -55,6 +57,25 @@ export const fetchProducts = () => async (dispatch) => {
   }
 };
 
+export const fetchProductsById = (idProduct) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const docRef = doc(db, "products", idProduct);
+    const docSnap = await getDoc(docRef);
+
+    const product = {
+      Name: docSnap.data().Name,
+      ImageUrl: docSnap.data().ImageUrl,
+      Price: docSnap.data().Price,
+    };
+    dispatch(setProduct(product));
+  } catch (error) {
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
 export const addProduct = (product) => async (dispatch) => {
   try {
     await addDoc(collection(db, "products"), {
@@ -77,6 +98,23 @@ export const deleteProduct = (idProduct) => async (dispatch) => {
     dispatch(fetchProducts());
   } catch (error) {
     console.log(error);
+    dispatch(setError(error));
+  } finally {
+    dispatch(setLoading(false));
+  }
+};
+
+export const editProductByID = (product) => async (dispatch) => {
+  dispatch(setLoading(true));
+  try {
+    const docRef = doc(db, "products", product.id);
+    await updateDoc(docRef, {
+      Name: product.Name,
+      ImageUrl: product.ImageUrl,
+      Price: product.Price,
+    });
+    dispatch(fetchProducts());
+  } catch (error) {
     dispatch(setError(error));
   } finally {
     dispatch(setLoading(false));

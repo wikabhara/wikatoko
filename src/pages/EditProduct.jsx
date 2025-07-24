@@ -3,24 +3,32 @@ import { AuthContext } from "../contexts/AuthContext";
 import { collection, updateDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate, useParams } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import {
+  editProductByID,
+  fetchProductsById,
+} from "../redux/feature/product/productSlice";
 
 export default function EditProductPage() {
+  const { product, isLoading, error } = useSelector((state) => state.product);
   const [Name, setName] = useState("");
   const [ImageUrl, setImageUrl] = useState("");
   const [Price, setPrice] = useState(0);
   const navigate = useNavigate();
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   async function editProduct(e) {
     e.preventDefault();
     try {
-      const docRef = doc(db, "products", id);
-      await updateDoc(docRef, {
-        Name: Name,
-        ImageUrl: ImageUrl,
-        Price: Price,
-      });
+      dispatch(editProductByID({ id, Name, ImageUrl, Price }));
+      // const docRef = doc(db, "products", id);
+      // await updateDoc(docRef, {
+      //   Name: Name,
+      //   ImageUrl: ImageUrl,
+      //   Price: Price,
+      // });
       Swal.fire("Berhasil!", "Produk berhasil diperbarui.", "success");
       navigate("/");
     } catch (error) {
@@ -29,28 +37,40 @@ export default function EditProductPage() {
   }
 
   useEffect(() => {
-    async function getProductById(idProduct) {
-      try {
-        const docRef = doc(db, "products", idProduct);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setName(docSnap.data().Name);
-          setImageUrl(docSnap.data().ImageUrl);
-          setPrice(docSnap.data().Price);
-        } else {
-          Swal.fire("Error", "Produk tidak ditemukan.", "error");
-        }
-      } catch (error) {
-        Swal.fire(
-          "Gagal",
-          "Terjadi kesalahan saat memperbarui produk.",
-          "error"
-        );
-      }
-    }
-    getProductById(id);
+    dispatch(fetchProductsById(id));
   }, []);
+
+  useEffect(() => {
+    if (product) {
+      setName(product.Name);
+      setImageUrl(product.ImageUrl);
+      setPrice(product.Price);
+    }
+  }, [product]);
+
+  // useEffect(() => {
+  //   async function getProductById(idProduct) {
+  //     try {
+  //       const docRef = doc(db, "products", idProduct);
+  //       const docSnap = await getDoc(docRef);
+
+  //       if (docSnap.exists()) {
+  //         setName(docSnap.data().Name);
+  //         setImageUrl(docSnap.data().ImageUrl);
+  //         setPrice(docSnap.data().Price);
+  //       } else {
+  //         Swal.fire("Error", "Produk tidak ditemukan.", "error");
+  //       }
+  //     } catch (error) {
+  //       Swal.fire(
+  //         "Gagal",
+  //         "Terjadi kesalahan saat memperbarui produk.",
+  //         "error"
+  //       );
+  //     }
+  //   }
+  //   getProductById(id);
+  // }, []);
   return (
     <>
       <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
