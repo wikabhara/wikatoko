@@ -5,22 +5,26 @@ import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Swal from "sweetalert2";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProducts } from "../redux/feature/product/productSlice";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const { products, isLoading, error } = useSelector((state) => state.product);
   const { user } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
-  async function getProducts() {
-    const querySnapshot = await getDocs(collection(db, "products"));
-    const result = querySnapshot.docs.map((doc) => {
-      return {
-        id: doc.id,
-        ...doc.data(),
-      };
-    });
-    setProducts(result);
-  }
+  // async function getProducts() {
+  //   const querySnapshot = await getDocs(collection(db, "products"));
+  //   const result = querySnapshot.docs.map((doc) => {
+  //     return {
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     };
+  //   });
+  //   setProducts(result);
+  // }
 
   async function deleteProduct(id) {
     Swal.fire({
@@ -36,7 +40,7 @@ export default function HomePage() {
         try {
           await deleteDoc(doc(db, "products", id));
           console.log("succesfully delete product with id", id);
-          await getProducts();
+          dispatch(fetchProducts());
         } catch (error) {
           console.log(error);
         }
@@ -50,7 +54,8 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    getProducts();
+    dispatch(fetchProducts());
+    // getProducts();
   }, []);
 
   return (
@@ -76,6 +81,8 @@ export default function HomePage() {
             </button>
           </div>
           <main>
+            {error && <tr>Failed to fetch product</tr>}
+            {isLoading && <tr>Loading......</tr>}
             {products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((p) => (
