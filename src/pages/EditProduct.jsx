@@ -9,6 +9,8 @@ import {
   editProductByID,
   fetchProductsById,
 } from "../redux/feature/product/productSlice";
+import UploadWidget from "../components/UploadWidget.jsx";
+useDispatch;
 
 export default function EditProductPage() {
   const { product, isLoading, error } = useSelector((state) => state.product);
@@ -50,7 +52,7 @@ export default function EditProductPage() {
         <div className="w-full max-w-lg">
           <h1 className="text-4xl font-bold text-center mb-6">Edit Product</h1>
 
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100">
             <div className="card-body">
               <form onSubmit={editProduct}>
                 <div className="form-control">
@@ -70,13 +72,16 @@ export default function EditProductPage() {
                   <label className="label">
                     <span className="label-text">Image URL</span>
                   </label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={ImageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    required
-                  />
+                  <div className="flex flex-row gap-2">
+                    <input
+                      type="text"
+                      className="input input-bordered w-full"
+                      value={ImageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      disabled={true}
+                    />
+                    <UploadWidget setImageUrl={setImageUrl} />
+                  </div>
                 </div>
 
                 <div className="form-control mt-4">

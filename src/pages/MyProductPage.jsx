@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../redux/feature/product/productSlice";
+import UploadWidget from "../components/UploadWidget.jsx";
 useDispatch;
 
 export default function MyProductPage() {
@@ -54,7 +55,7 @@ export default function MyProductPage() {
           )}
           <h1 className="text-4xl font-bold text-center mb-6">Add Product</h1>
 
-          <div className="card bg-base-100 shadow-xl">
+          <div className="card bg-base-100">
             <div className="card-body">
               <form onSubmit={submitProduct}>
                 <div className="form-control">
@@ -75,14 +76,17 @@ export default function MyProductPage() {
                   <label className="label">
                     <span className="label-text">Image URL</span>
                   </label>
-                  <input
-                    type="text"
-                    placeholder="https://example.com/image.jpg"
-                    className="input input-bordered w-full"
-                    value={ImageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    required
-                  />
+                  <div className="flex flex-row gap-2">
+                    <input
+                      type="text"
+                      placeholder="https://uploadfotoprodukmu.com/image.jpg"
+                      className="input input-bordered w-full"
+                      value={ImageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      disabled={true}
+                    />
+                    <UploadWidget setImageUrl={setImageUrl} />
+                  </div>
                 </div>
 
                 <div className="form-control mt-4">
