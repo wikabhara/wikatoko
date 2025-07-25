@@ -3,7 +3,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../configs/firebase";
 import { useNavigate } from "react-router";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaBars } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -50,74 +50,110 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
-      <div className="bg-base-200 min-h-screen p-4 md:p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            {user && (
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2">
-                Hai {user.email}
-              </h2>
-            )}
-            <h1 className="text-4xl font-bold">Product List</h1>
-          </div>
+    <div className="drawer lg:drawer-open">
+      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
 
-          <div className="text-center mb-8">
+      <div className="drawer-content flex flex-col">
+        <div className="bg-base-200 min-h-screen p-4 md:p-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center mb-8">
+              <label
+                htmlFor="my-drawer"
+                className="btn btn-square btn-ghost lg:hidden"
+              >
+                <FaBars size={20} />
+              </label>
+              <div className="text-center flex-grow">
+                <h1 className="text-4xl font-bold">Product List</h1>
+              </div>
+            </div>
+
+            <main className="bg-base-100 rounded-lg p-4">
+              <div className="overflow-x-auto">
+                <table className="table table-zebra w-full">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Image</th>
+                      <th>Name</th>
+                      <th>Price</th>
+                      <th>Stock</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {isLoading && (
+                      <tr>
+                        <td colSpan="6" className="text-center">
+                          <span className="loading loading-spinner loading-lg"></span>
+                        </td>
+                      </tr>
+                    )}
+                    {!isLoading &&
+                      products.length > 0 &&
+                      products.map((p, index) => (
+                        <tr key={p.id} className="hover">
+                          <th>{index + 1}</th>
+                          <td>
+                            <div className="avatar">
+                              <div className="w-16 rounded">
+                                <img src={p.ImageUrl} alt={p.Name} />
+                              </div>
+                            </div>
+                          </td>
+                          <td className="font-bold">{p.Name}</td>
+                          <td>Rp {Number(p.Price).toLocaleString("id-ID")}</td>
+                          <td>{p.Stock}</td>
+                          <td>
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() =>
+                                  navigate(`/products/edit/${p.id}`)
+                                }
+                                className="btn btn-ghost btn-xs"
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                onClick={() => deleteProduct(p.id)}
+                                className="btn btn-ghost btn-xs text-error"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+
+      {/* Sidebar  */}
+      <div className="drawer-side">
+        <label
+          htmlFor="my-drawer"
+          aria-label="close sidebar"
+          className="drawer-overlay"
+        ></label>
+        <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+          <li className="text-xl font-bold p-4">WikaToko CMS</li>
+          <li>
+            <h3>Dashboard</h3>
+          </li>
+          <li className="mt-4">
             <button
               onClick={() => navigate("/myproduct/add")}
-              type="button"
-              className="btn btn-primary"
+              className="btn btn-primary w-full"
             >
               Add New Product
             </button>
-          </div>
-          <main>
-            {error && <tr>Failed to fetch product</tr>}
-            {isLoading && <tr>Loading......</tr>}
-            {products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {products.map((p) => (
-                  <div key={p.id} className="card bg-base-100">
-                    <figure className="px-6 pt-6">
-                      <img
-                        src={p.ImageUrl}
-                        alt={p.Name}
-                        className="h-48 w-full object-contain"
-                      />
-                    </figure>
-                    <div className="card-body">
-                      <h2 className="card-title">{p.Name}</h2>
-                      <p className="text-lg font-semibold text-primary">
-                        Rp {Number(p.Price).toLocaleString("id-ID")}
-                      </p>
-                      <p className="text-md">Stok: {p.Stock}</p>
-
-                      <div className="card-actions justify-end mt-4">
-                        <button
-                          onClick={() => navigate(`/products/edit/${p.id}`)}
-                          className="btn btn-outline btn-sm btn-info"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => deleteProduct(p.id)}
-                          className="btn btn-outline btn-sm btn-error"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-16">
-                <p>Belum ada produk. Silakan tambahkan produk baru.</p>
-              </div>
-            )}
-          </main>
-        </div>
+          </li>
+        </ul>
       </div>
-    </>
+    </div>
   );
 }
